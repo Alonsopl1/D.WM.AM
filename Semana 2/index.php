@@ -137,7 +137,7 @@
 
                         <li>
                             <a class="dropdown-item"
-                               href="empresa.php#quienes">
+                               href="empresa.php#quienes">  
                                 Quienes Somos
                             </a>
                         </li>
