@@ -61,6 +61,7 @@ def doc_to_itemout(doc) -> ItemOut:
 async def health():
     return {"status": "ok"}
 
+
 @app.get("/mongo-test")
 async def mongo_test():
     total = await coll.count_documents({})
