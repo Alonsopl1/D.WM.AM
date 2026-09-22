@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tienda online de quesos artesanales Queso & Sabor.">
+  <title>Productos | Queso &amp; Sabor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="productos">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html" aria-label="Ir al inicio de Queso y Sabor"><span class="brand-mark">Q</span><span>Queso &amp; Sabor</span></a>
+    <nav class="nav-links" data-nav-links aria-label="Navegación principal">
+      <a class="nav-link" data-nav-page="inicio" href="index.html">Inicio</a>
+      <a class="nav-link" data-nav-page="productos" href="productos.html">Productos</a>
+      <a class="nav-link" data-nav-page="nosotros" href="nosotros.html">Sobre nosotros</a>
+      <a class="nav-link" data-nav-page="locales" href="locales.html">Locales</a>
+      <a class="nav-link" data-nav-page="contacto" href="contacto.html">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="login.html" aria-label="Cuenta de usuario"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg></a>
+      <a class="icon-btn favorites-header" href="productos.html#favoritos" aria-label="Ver favoritos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg><span class="badge-count" data-favorite-count>0</span></a>
+      <button class="icon-btn" type="button" data-cart-open aria-label="Abrir carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H6M10 20h.01M17 20h.01"/></svg><span class="badge-count" data-cart-count>0</span></button>
+      <button class="icon-btn menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-label="Abrir o cerrar menú"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main>
+<section class="page-hero">
+  <div class="container"><span class="eyebrow">Nuestro catálogo</span><h1>Del campo a tu mesa</h1><p>Filtra por tipo, leche y precio. El catálogo se actualiza completamente en el navegador.</p></div>
+</section>
+<section class="section">
+  <div class="container">
+    <button class="btn btn--secondary mobile-filter-toggle" type="button" data-filter-toggle aria-expanded="false" aria-controls="filters-panel">Mostrar filtros</button>
+    <div class="catalog-layout">
+      <aside class="filters-panel" id="filters-panel" aria-label="Filtros de productos">
+        <div class="filter-section">
+          <h3>Tipo de queso</h3>
+          <div class="checkbox-list">
+            <label class="check-row"><input type="checkbox" name="tipo" value="Fresco"> Fresco</label>
+            <label class="check-row"><input type="checkbox" name="tipo" value="Maduro"> Maduro</label>
+            <label class="check-row"><input type="checkbox" name="tipo" value="Semimaduro"> Semimaduro</label>
+            <label class="check-row"><input type="checkbox" name="tipo" value="Azul"> Azul</label>
+            <label class="check-row"><input type="checkbox" name="tipo" value="Cremoso"> Cremoso</label>
+          </div>
+        </div>
+        <div class="filter-section">
+          <h3>Tipo de leche</h3>
+          <div class="checkbox-list">
+            <label class="check-row"><input type="checkbox" name="leche" value="Vaca"> Vaca</label>
+            <label class="check-row"><input type="checkbox" name="leche" value="Cabra"> Cabra</label>
+            <label class="check-row"><input type="checkbox" name="leche" value="Oveja"> Oveja</label>
+            <label class="check-row"><input type="checkbox" name="leche" value="Mixta"> Mixta</label>
+          </div>
+        </div>
+        <div class="filter-section">
+          <h3>Precio</h3>
+          <div class="range-stack">
+            <label for="price-min" class="sr-only">Precio mínimo</label>
+            <input id="price-min" type="range" min="0" max="15000" step="500" value="0">
+            <label for="price-max" class="sr-only">Precio máximo</label>
+            <input id="price-max" type="range" min="0" max="15000" step="500" value="15000">
+            <div class="range-values"><span>Mín. <span data-min-price>$0</span></span><span>Máx. <span data-max-price>$15.000</span></span></div>
+          </div>
+        </div>
+        <div class="filter-section"><button class="btn btn--secondary btn--block" type="button" data-clear-filters>Limpiar filtros</button></div>
+      </aside>
+      <div class="catalog-main">
+        <div class="catalog-toolbar">
+          <p class="catalog-count" data-catalog-count>Mostrando productos</p>
+          <label class="sort-control" for="sort-products">Ordenar por:
+            <select id="sort-products">
+              <option value="popular">Más vendidos</option>
+              <option value="price-asc">Menor precio</option>
+              <option value="price-desc">Mayor precio</option>
+              <option value="name-asc">Nombre A-Z</option>
+              <option value="name-desc">Nombre Z-A</option>
+            </select>
+          </label>
+        </div>
+        <div class="product-grid" data-product-grid></div>
+        <nav class="pagination" data-pagination aria-label="Paginación de productos"></nav>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container footer-benefits" aria-label="Beneficios de compra">
+    <div class="footer-benefit">🧀 Elaboración artesanal</div>
+    <div class="footer-benefit">🚚 Envío a todo el país</div>
+    <div class="footer-benefit">🌿 Ingredientes seleccionados</div>
+    <div class="footer-benefit">🔒 Compra segura</div>
+  </div>
+  <div class="container footer-grid">
+    <div>
+      <h3>Queso &amp; Sabor</h3>
+      <p>Quesos artesanales hechos con dedicación, seleccionados para llevar tradición y buen sabor a tu mesa.</p>
+    </div>
+    <div>
+      <h3>Enlaces rápidos</h3>
+      <div class="footer-links">
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Sobre nosotros</a>
+        <a href="locales.html">Locales</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <div class="footer-links">
+        <a href="mailto:hola@quesoysabor.cl">hola@quesoysabor.cl</a>
+        <span>+56 9 5555 0123</span>
+        <span>Santiago, Chile</span>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">© <span data-current-year></span> Queso &amp; Sabor · Proyecto frontend universitario.</div>
+</footer>
+<script src="js/productos.js"></script>
+<script src="js/carrito.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

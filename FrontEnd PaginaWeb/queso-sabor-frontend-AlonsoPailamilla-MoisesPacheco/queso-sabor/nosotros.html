@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tienda online de quesos artesanales Queso & Sabor.">
+  <title>Sobre nosotros | Queso &amp; Sabor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="nosotros">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html" aria-label="Ir al inicio de Queso y Sabor"><span class="brand-mark">Q</span><span>Queso &amp; Sabor</span></a>
+    <nav class="nav-links" data-nav-links aria-label="Navegación principal">
+      <a class="nav-link" data-nav-page="inicio" href="index.html">Inicio</a>
+      <a class="nav-link" data-nav-page="productos" href="productos.html">Productos</a>
+      <a class="nav-link" data-nav-page="nosotros" href="nosotros.html">Sobre nosotros</a>
+      <a class="nav-link" data-nav-page="locales" href="locales.html">Locales</a>
+      <a class="nav-link" data-nav-page="contacto" href="contacto.html">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="login.html" aria-label="Cuenta de usuario"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg></a>
+      <a class="icon-btn favorites-header" href="productos.html#favoritos" aria-label="Ver favoritos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg><span class="badge-count" data-favorite-count>0</span></a>
+      <button class="icon-btn" type="button" data-cart-open aria-label="Abrir carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H6M10 20h.01M17 20h.01"/></svg><span class="badge-count" data-cart-count>0</span></button>
+      <button class="icon-btn menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-label="Abrir o cerrar menú"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main>
+<section class="page-hero"><div class="container"><span class="eyebrow">Conócenos</span><h1>Sobre nosotros</h1><p>Una tienda pensada para acercar quesos artesanales, historias de origen y buenos momentos a tu mesa.</p></div></section>
+<section class="section"><div class="container about-intro">
+  <div class="about-card"><span class="eyebrow">Quiénes somos</span><h2>Queso &amp; Sabor</h2><p>Somos un emprendimiento dedicado a la selección y venta de quesos artesanales. Buscamos reunir productos con identidad, elaborados con cuidado y pensados para personas que disfrutan descubrir nuevos sabores.</p><p>Queremos que elegir un queso sea simple, cercano y entretenido, ya sea para una tabla, una receta o un regalo.</p></div>
+  <img class="about-image" src="assets/img/nosotros-queseria.jpg" alt="Quesería artesanal, imagen temporal para reemplazar">
+</div></section>
+<section class="section section--cream"><div class="container about-history">
+  <img class="about-image" src="assets/img/historia.jpg" alt="Historia de productores de queso, imagen temporal para reemplazar" loading="lazy">
+  <div><span class="eyebrow">Nuestra historia</span><h2>Una idea que comenzó alrededor de una mesa</h2><p>Queso &amp; Sabor nace de la intención de reunir en un solo lugar productos artesanales que normalmente se encuentran de manera dispersa. Con el tiempo, la idea creció hacia una tienda donde el origen, el proceso y la experiencia de compra fueran igual de importantes.</p></div>
+</div></section>
+<section class="section"><div class="container about-commitment">
+  <div><span class="eyebrow">Nuestro compromiso</span><h2>Calidad, cercanía y producción artesanal</h2><p>Nos comprometemos a comunicar de forma clara las características de cada producto y a valorar el trabajo de quienes los elaboran.</p><ul class="feature-list"><li><span class="check-dot">✓</span><span>Calidad y cuidado en la selección.</span></li><li><span class="check-dot">✓</span><span>Producción artesanal e ingredientes seleccionados.</span></li><li><span class="check-dot">✓</span><span>Apoyo y visibilidad a pequeños productores.</span></li></ul></div>
+  <img class="about-image" src="assets/img/compromiso.jpg" alt="Selección de quesos de calidad, imagen temporal para reemplazar" loading="lazy">
+</div></section>
+<section class="section section--beige"><div class="container about-bottom-grid">
+  <div class="about-card"><span class="eyebrow">Comunidad</span><h2>Nuestras redes sociales</h2><p>Síguenos para conocer nuevos productos, recetas e ideas para tus tablas.</p><div class="social-row"><a class="social-link" href="#" aria-label="Instagram de Queso y Sabor">◎ Instagram</a><a class="social-link" href="#" aria-label="Facebook de Queso y Sabor">f Facebook</a><a class="social-link" href="#" aria-label="TikTok de Queso y Sabor">♪ TikTok</a></div></div>
+  <form class="form-card" id="feedback-form" novalidate>
+    <span class="eyebrow">Comentarios para mejorar</span><h2>Tu opinión nos ayuda</h2>
+    <div class="form-group"><label for="feedback-email">Correo electrónico</label><input class="input" id="feedback-email" name="correo" type="email" autocomplete="email" placeholder="tu@correo.cl"><p class="field-error" aria-live="polite"></p></div>
+    <div class="form-group"><label for="feedback-comment">Comentario o recomendación</label><textarea id="feedback-comment" name="comentario" placeholder="Cuéntanos qué podríamos mejorar"></textarea><p class="field-error" aria-live="polite"></p></div>
+    <button class="btn btn--primary" type="submit">Enviar comentario</button><p class="form-status" role="status" hidden></p>
+  </form>
+</div></section>
+</main>
+<footer class="site-footer">
+  <div class="container footer-benefits" aria-label="Beneficios de compra">
+    <div class="footer-benefit">🧀 Elaboración artesanal</div>
+    <div class="footer-benefit">🚚 Envío a todo el país</div>
+    <div class="footer-benefit">🌿 Ingredientes seleccionados</div>
+    <div class="footer-benefit">🔒 Compra segura</div>
+  </div>
+  <div class="container footer-grid">
+    <div>
+      <h3>Queso &amp; Sabor</h3>
+      <p>Quesos artesanales hechos con dedicación, seleccionados para llevar tradición y buen sabor a tu mesa.</p>
+    </div>
+    <div>
+      <h3>Enlaces rápidos</h3>
+      <div class="footer-links">
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Sobre nosotros</a>
+        <a href="locales.html">Locales</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <div class="footer-links">
+        <a href="mailto:hola@quesoysabor.cl">hola@quesoysabor.cl</a>
+        <span>+56 9 5555 0123</span>
+        <span>Santiago, Chile</span>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">© <span data-current-year></span> Queso &amp; Sabor · Proyecto frontend universitario.</div>
+</footer>
+<script src="js/productos.js"></script>
+<script src="js/carrito.js"></script>
+<script src="js/main.js"></script>
+<script src="js/formularios.js"></script>
+</body>
+</html>

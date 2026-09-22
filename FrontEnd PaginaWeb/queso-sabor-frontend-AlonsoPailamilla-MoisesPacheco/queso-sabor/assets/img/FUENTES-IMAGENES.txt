@@ -1,0 +1,10 @@
+FUENTES DE IMÁGENES
+===================
+
+Se incorporaron fotografías reales de quesos en el proyecto para reemplazar los placeholders iniciales.
+
+Estas imágenes fueron obtenidas mediante búsqueda web dentro del entorno de trabajo y luego se adaptaron en tamaño y recorte para el frontend.
+
+Si necesitas una versión final con atribución formal para entrega o publicación, lo recomendable es:
+- reemplazarlas por imágenes propias, o
+- usar imágenes con licencia Creative Commons / dominio público y agregar su crédito correspondiente.

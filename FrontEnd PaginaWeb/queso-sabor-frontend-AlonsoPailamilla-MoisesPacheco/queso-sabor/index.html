@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tienda online de quesos artesanales Queso & Sabor.">
+  <title>Inicio | Queso &amp; Sabor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="inicio">
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="index.html" aria-label="Ir al inicio de Queso y Sabor"><span class="brand-mark">Q</span><span>Queso &amp; Sabor</span></a>
+    <nav class="nav-links" data-nav-links aria-label="Navegación principal">
+      <a class="nav-link" data-nav-page="inicio" href="index.html">Inicio</a>
+      <a class="nav-link" data-nav-page="productos" href="productos.html">Productos</a>
+      <a class="nav-link" data-nav-page="nosotros" href="nosotros.html">Sobre nosotros</a>
+      <a class="nav-link" data-nav-page="locales" href="locales.html">Locales</a>
+      <a class="nav-link" data-nav-page="contacto" href="contacto.html">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="login.html" aria-label="Cuenta de usuario"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg></a>
+      <a class="icon-btn favorites-header" href="productos.html#favoritos" aria-label="Ver favoritos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg><span class="badge-count" data-favorite-count>0</span></a>
+      <button class="icon-btn" type="button" data-cart-open aria-label="Abrir carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L20 8H6M10 20h.01M17 20h.01"/></svg><span class="badge-count" data-cart-count>0</span></button>
+      <button class="icon-btn menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-label="Abrir o cerrar menú"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main>
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Tradición que se comparte</span>
+      <h1>Quesos artesanales con sabor a tradición</h1>
+      <p>Seleccionamos quesos hechos con tiempo, oficio e ingredientes de calidad. Descubre sabores de origen y encuentra el queso ideal para cada ocasión.</p>
+      <div class="hero-actions">
+        <a class="btn btn--primary" href="productos.html">Ver productos</a>
+        <a class="btn btn--secondary" href="nosotros.html">Conócenos</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <img class="hero-image" src="assets/img/hero-quesos.jpg" alt="Tabla de quesos artesanales, imagen temporal para reemplazar">
+      <div class="hero-note">Selección artesanal · pequeños productores · grandes sabores</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Explora por estilo</span>
+      <h2>Encuentra tu tipo de queso</h2>
+      <p>Desde sabores suaves y frescos hasta maduraciones más intensas.</p>
+    </div>
+    <div class="category-grid">
+      <a class="category-card" href="productos.html?tipo=Maduro"><div class="category-icon">🟡</div><h3>Quesos maduros</h3><p>Sabores intensos, firmes y con carácter.</p></a>
+      <a class="category-card" href="productos.html?tipo=Fresco"><div class="category-icon">⚪</div><h3>Quesos frescos</h3><p>Texturas suaves para disfrutar todos los días.</p></a>
+      <a class="category-card" href="productos.html?leche=Cabra"><div class="category-icon">🐐</div><h3>Quesos de cabra</h3><p>Aromáticos y con un toque naturalmente ácido.</p></a>
+      <a class="category-card" href="productos.html?leche=Vaca"><div class="category-icon">🐄</div><h3>Quesos de vaca</h3><p>Clásicos versátiles para tablas y cocina.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Recomendados</span>
+      <h2>Productos destacados</h2>
+      <p>Una selección para comenzar a conocer Queso &amp; Sabor.</p>
+    </div>
+    <div class="product-grid" data-featured-products></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split-section">
+    <div class="split-media"><img src="assets/img/artesania.jpg" alt="Proceso artesanal de elaboración de queso, imagen temporal para reemplazar" loading="lazy"></div>
+    <div>
+      <span class="eyebrow">Hecho con oficio</span>
+      <h2>Elaboración artesanal que respeta el tiempo</h2>
+      <p>Trabajamos con productos pensados para conservar su carácter, textura y sabor. La elaboración artesanal pone el foco en el cuidado de cada etapa, desde la leche hasta la maduración.</p>
+      <ul class="feature-list">
+        <li><span class="check-dot">✓</span><span>Selección de ingredientes y proveedores.</span></li>
+        <li><span class="check-dot">✓</span><span>Procesos de maduración acordes a cada estilo.</span></li>
+        <li><span class="check-dot">✓</span><span>Productos pensados para compartir y disfrutar.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section--beige">
+  <div class="container">
+    <div class="section-heading"><span class="eyebrow">Comprar con confianza</span><h2>Lo que cuidamos por ti</h2></div>
+    <div class="benefits-grid">
+      <article class="benefit-card"><div class="benefit-icon">🧀</div><h3>Elaboración artesanal</h3><p>Productos seleccionados por su origen, proceso y sabor.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🌿</div><h3>Ingredientes seleccionados</h3><p>Priorizamos calidad, frescura y combinaciones simples.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🚚</div><h3>Envíos</h3><p>Una experiencia de compra preparada para despachos a todo el país.</p></article>
+      <article class="benefit-card"><div class="benefit-icon">🔒</div><h3>Compra segura</h3><p>Interfaz clara y pasos de compra fáciles de entender.</p></article>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container footer-benefits" aria-label="Beneficios de compra">
+    <div class="footer-benefit">🧀 Elaboración artesanal</div>
+    <div class="footer-benefit">🚚 Envío a todo el país</div>
+    <div class="footer-benefit">🌿 Ingredientes seleccionados</div>
+    <div class="footer-benefit">🔒 Compra segura</div>
+  </div>
+  <div class="container footer-grid">
+    <div>
+      <h3>Queso &amp; Sabor</h3>
+      <p>Quesos artesanales hechos con dedicación, seleccionados para llevar tradición y buen sabor a tu mesa.</p>
+    </div>
+    <div>
+      <h3>Enlaces rápidos</h3>
+      <div class="footer-links">
+        <a href="productos.html">Productos</a>
+        <a href="nosotros.html">Sobre nosotros</a>
+        <a href="locales.html">Locales</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+    <div>
+      <h3>Contacto</h3>
+      <div class="footer-links">
+        <a href="mailto:hola@quesoysabor.cl">hola@quesoysabor.cl</a>
+        <span>+56 9 5555 0123</span>
+        <span>Santiago, Chile</span>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">© <span data-current-year></span> Queso &amp; Sabor · Proyecto frontend universitario.</div>
+</footer>
+<script src="js/productos.js"></script>
+<script src="js/carrito.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
