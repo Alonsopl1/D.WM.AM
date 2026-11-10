@@ -1,0 +1,10 @@
+﻿Origen;Destino;En origen;En destino;Regla
+Cliente;Pedido;1;0..*;"Un cliente puede generar varios pedidos; un pedido pertenece a un cliente."
+Pedido;DetallePedido;1;1..*;Un pedido confirmado desde carrito tiene una o más líneas.
+DetallePedido;Producto;0..*;1;"Múltiples líneas históricas pueden referenciar un queso; snapshots preservan precio y nombre."
+Pedido;Pago;1;0..1;Se crea a lo sumo un intento de pago en esta versión (UNIQUE order_id).
+Cliente;Favorito;1;0..*;Cada favorito pertenece a un cliente.
+Producto;Favorito;1;0..*;Un producto puede estar en favoritos de varias cuentas.
+Pedido;ReservaStock;1;0..1;"El pedido creado mantiene una reserva de stock; una reserva pertenece a un pedido."
+ReservaStock;Producto;0..*;1..*;Cada reserva contiene uno o más productos y un queso puede ser reservado varias veces.
+Cliente;Mensaje;0..1;0..*;Mensajes anónimos pueden no pertenecer a un cliente identificado.

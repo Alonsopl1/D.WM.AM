@@ -1,0 +1,32 @@
+"""Contraseñas: scrypt con sal aleatoria; tokens HS256 de corta duración."""
+import base64
+import hashlib
+import hmac
+import os
+from datetime import datetime, timedelta, timezone
+import jwt
+from common.base import env_secret
+
+def password_hash(password: str) -> str:
+    salt = os.urandom(16)
+    value = hashlib.scrypt(password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
+    return "scrypt$16384$" + base64.urlsafe_b64encode(salt).decode() + "$" + base64.urlsafe_b64encode(value).decode()
+
+def verify_password(password: str, encoded: str) -> bool:
+    try:
+        scheme,n,salt,value=encoded.split("$")
+        if scheme != "scrypt" or n != "16384": return False
+        calculated=hashlib.scrypt(password.encode(),salt=base64.urlsafe_b64decode(salt),n=2**14,r=8,p=1,dklen=32)
+        return hmac.compare_digest(calculated,base64.urlsafe_b64decode(value))
+    except (ValueError,TypeError): return False
+
+def create_access_token(user: dict) -> str:
+    now=datetime.now(timezone.utc)
+    return jwt.encode({"sub":str(user["id"]),"role":user["role"],"iat":now,"exp":now+timedelta(minutes=30),"aud":"quesosabor"},env_secret("JWT_SIGNING_KEY"),algorithm="HS256")
+
+def decode_access_token(token: str):
+    return jwt.decode(token,env_secret("JWT_SIGNING_KEY"),algorithms=["HS256"],audience="quesosabor")
+
+def create_internal_token(user: dict) -> str:
+    now=datetime.now(timezone.utc)
+    return jwt.encode({"sub":str(user["sub"]),"role":user["role"],"iat":now,"exp":now+timedelta(seconds=45),"aud":"internal"},env_secret("GATEWAY_CONTEXT_KEY"),algorithm="HS256")

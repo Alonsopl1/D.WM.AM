@@ -1,0 +1,10 @@
+﻿Stakeholder;Interés;Rol asociado;Uso de información;Permiso o condición
+Visitante;Conocer el catálogo y enviar consultas;Visitante;Catálogo y formularios públicos;Permisos públicos según S01/S02/S03/S04/S10/S11
+Cliente de la quesería;Administrar cuenta, favoritos, pedidos y pago de prueba;Cliente;Datos de sus propios recursos;"Permisos S01-S17, S23-S24; sin administración"
+Administración del comercio;Gestionar inventario, mensajes y aprobar pago sandbox;Administrador;Catálogo, pedidos, pago sandbox y mensajes;Permisos administrativos S18-S22
+Equipo de soporte;Resolver incidencias de pedidos y pagos;Administrador (si cuenta autorizada);Historial y estado del recurso, según operación;No hay rol de soporte diferenciado: depende de admin autorizado
+Profesor/evaluador;Revisar requisitos y pruebas;Sin rol operativo;Informe y capturas ficticias;Sin permisos operativos por defecto
+Proveedor de pago externo (futuro);Procesar cobros reales mediante integración a definir;Sin rol operativo;No se integra en esta entrega;"Sin permisos operativos; no hay webhooks reales"
+Gateway;Verificar identidad y enrutar llamadas permitidas;Identidad técnica;Transfiere contexto firmado y credenciales por destino;"Solo rutas allowlist; no dispone de clave exclusiva confirmación de pagos"
+Servicio payments;Confirmar pago sandbox ante orders;Identidad técnica;Actualiza pedidos por contrato privado;POST /internal/orders/{id}/paid + capacidad PAYMENT_CONFIRMATION_KEY
+Servicios privados inventory/orders/clients/graphql/auth;Ofrecer operaciones internas acotadas;Identidad técnica;Solo contrato autorizado de cada dominio;Clave de servicio destino, sin rutas públicas directas

@@ -1,0 +1,70 @@
+"""Prueba HTTP reproducible de catálogo con p95, throughput y consumo aproximado.
+
+Ejemplo: python scripts/load_test.py --n 40 --workers 4 --out docs/evidencia_carga.json
+No usar >120 requests/min por IP para medición de latencia sin 429 de rate limit.
+"""
+import argparse,concurrent.futures,statistics,time,urllib.request,urllib.error,json,sys,platform,datetime
+from collections import Counter
+from pathlib import Path
+
+parser=argparse.ArgumentParser()
+parser.add_argument('--n',type=int,default=40)
+parser.add_argument('--workers',type=int,default=4)
+parser.add_argument('--url',default='http://127.0.0.1:8000/api/v1/products?limit=6')
+parser.add_argument('--out',default='')
+args=parser.parse_args()
+if not 1<=args.n<=10000 or not 1<=args.workers<=100:raise SystemExit('Parámetros fuera de rango')
+
+try:
+    import psutil
+except ImportError:
+    psutil=None
+
+def sample_processes():
+    if not psutil:return None
+    out={}
+    for p in psutil.process_iter(attrs=['pid','cmdline']):
+        try:
+            cmd=' '.join(p.info['cmdline'] or [])
+            if 'uvicorn services.' in cmd and ('--port' in cmd):
+                cpu=p.cpu_times();out[p.pid]={'cpu_seconds':cpu.user+cpu.system,'rss_bytes':p.memory_info().rss}
+        except (psutil.NoSuchProcess,psutil.AccessDenied,psutil.ZombieProcess):pass
+    return out
+
+def one(_):
+    start=time.perf_counter()
+    try:
+        with urllib.request.urlopen(args.url,timeout=6) as res:
+            res.read();code=res.status
+    except urllib.error.HTTPError as e:
+        code=e.code
+    except Exception:
+        code=0
+    return time.perf_counter()-start,code
+
+before=sample_processes();start=time.perf_counter()
+with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
+    results=list(pool.map(one,range(args.n)))
+duration=time.perf_counter()-start;after=sample_processes()
+latencies=sorted(x[0]*1000 for x in results if x[1]==200)
+index=max(0,int((len(latencies)-1)*0.95))
+statuses=Counter(str(code) for _,code in results)
+result={'fecha_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'entorno':{'sistema':platform.system(),'python':sys.version.split()[0],'backend':'servicios locales con SQLite', 'muestra':'sintética, no tráfico real'},
+        'requests':args.n,'concurrency':args.workers,'duration_seconds':round(duration,3),
+        'successful_requests':len(latencies),'p95_success_ms':round(latencies[index],2) if latencies else None,
+        'throughput_success_rps':round(len(latencies)/duration,2) if duration else None,
+        'statuses':dict(statuses),'errors':sum(code!=200 for _,code in results)}
+if before is not None and after is not None:
+    common=set(before)&set(after)
+    cpu=sum(max(0,after[i]['cpu_seconds']-before[i]['cpu_seconds']) for i in common)
+    result['cpu_percent_one_core_equivalent']=round(100*cpu/duration,1) if duration else 0
+    result['rss_total_mb_after']=round(sum(after[i]['rss_bytes'] for i in after)/1048576,1)
+    result['process_count']=len(after)
+else:
+    result['cpu_percent_one_core_equivalent']=None
+    result['rss_total_mb_after']=None
+print(json.dumps(result,indent=2,ensure_ascii=False))
+if args.out:
+    path=Path(args.out);path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(result,indent=2,ensure_ascii=False),encoding='utf-8')

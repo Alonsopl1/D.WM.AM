@@ -1,0 +1,8 @@
+digraph G {graph [label="C3 · Componentes de GraphQL privado",labelloc=t,fontname="DejaVu Sans",fontsize=23,bgcolor="white",pad=.35,ranksep=.7];node[shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=12,color="#447285",fillcolor="#E8F3F8",margin=".20,.15"];edge[fontname="DejaVu Sans",fontsize=10,color="#526677"];rankdir=LR;
+ api[label="API Gateway\nPOST /graphql",fillcolor="#F5F5F9"];
+ pol[label="Política de campos\nJWT verificado, límites\nprofundidad/costo"];
+ resol[label="Resolvers\nresumenPedido, misFavoritos"];
+ adapt[label="Conectores\nREST a privados"];
+ compositor[label="Compositor\nData + errors; error explícito\ncuando falla inventory",fillcolor="#FEF0DD"];
+ service[label="Orders / Clients / Inventory",fillcolor="#E4ECE3"];
+ api->pol->resol->adapt->service;service->compositor[constraint=false];compositor->api[constraint=false];}

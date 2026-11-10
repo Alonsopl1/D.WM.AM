@@ -1,0 +1,9 @@
+digraph G {graph [label="C3 · Componentes de Orders",labelloc=t,fontname="DejaVu Sans",fontsize=23,bgcolor="white",pad=.35,ranksep=.7];node[shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=12,color="#447285",fillcolor="#E8F3F8",margin=".20,.15"];edge[fontname="DejaVu Sans",fontsize=10,color="#526677"];rankdir=LR;
+ gw[label="Gateway autenticado",fillcolor="#F5F5F9"];
+ pol[label="Política de acceso\npropietario / admin"];
+ idem[label="Control de idempotencia\nUNIQUE(cliente, clave)"];
+ svc[label="Servicio de pedidos\nestados y compensación"];
+ inv[label="Adaptador de inventory\nreserva / libera stock",fillcolor="#E4ECE3"];
+ pay[label="Adaptador de payments\nconfirmación con secreto dedicado",fillcolor="#E4ECE3"];
+ repo[label="Repositorio de pedidos\nSQLite orders",fillcolor="#F9ECD9"];
+ gw->pol->idem->svc;svc->inv;pay->svc;svc->repo;}

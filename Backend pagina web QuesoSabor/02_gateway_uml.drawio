@@ -1,0 +1,17 @@
+digraph domain {
+ graph [rankdir=LR,bgcolor="white",nodesep=.45,ranksep=.65]; node [shape=record,fontname="DejaVu Sans",fontsize=10,style="rounded,filled",fillcolor="#F2F7F6",color="#54776E"]; edge [fontname="DejaVu Sans",fontsize=9,color="#657A75",arrowsize=.7];
+ Cliente [label="{Cliente|id: int\lnombre: str\lcorreo: str\lpassword_hash: str\lrole: str\l}"];
+ Favorito [label="{Favorito|cliente_id: int\lproducto_id: int\l}"];
+ Producto [label="{Producto|id: int\lnombre: str\ltipo: str\lleche: str\lprecio: int\lstock: int\ldisponible: bool\l}"];
+ Pedido [label="{Pedido|id: uuid\lclient_id: int\ltotal: int\lstatus: str\l}"];
+ Linea [label="{DetallePedido|order_id: uuid\lproduct_id: int\lquantity: int\lunit_price: int\l}"];
+ Pago [label="{Pago|id: uuid\lorder_id: uuid\lstatus: str\lamount: int\l}"];
+ Reserva [label="{ReservaStock|order_id: uuid\lstatus: str\litems_json: str\l}"];
+ Mensaje [label="{Mensaje|id: int\lkind: str\lemail: str\lbody: str\l}"];
+ Clientes [label="{«service» ClientsService|registrar()\lperfil()\lfavoritos()\lcontacto()\l}",fillcolor="#FFF2D8"];
+ Catalogo [label="{«service» InventoryService|consultarProductos()\lreservar()\lcrearProducto()\l}",fillcolor="#FFF2D8"];
+ Ordenes [label="{«service» OrdersService|crearPedido()\lcancelarPedido()\lconsultaPedido()\l}",fillcolor="#FFF2D8"];
+ Pagos [label="{«service» PaymentService|iniciarPago()\laprobarSandbox()\l}",fillcolor="#FFF2D8"];
+ Cliente -> Pedido [label="1 / 0..*",dir=none]; Pedido -> Linea [label="1 / 1..*",dir=none]; Linea -> Producto [label="0..* / 1",dir=none]; Pedido -> Pago [label="1 / 0..1",dir=none]; Pedido -> Reserva [label="1 / 0..1",dir=none]; Cliente -> Favorito [label="1 / 0..*",dir=none]; Favorito -> Producto [label="0..* / 1",dir=none]; Cliente -> Mensaje [label="0..1 / 0..*",dir=none];
+ Clientes -> Cliente [style=dashed,arrowhead=open]; Catalogo -> Producto [style=dashed,arrowhead=open]; Ordenes -> Pedido [style=dashed,arrowhead=open]; Pagos -> Pago [style=dashed,arrowhead=open];
+}

@@ -1,0 +1,9 @@
+digraph G { graph [label="C1 · Contexto de Queso & Sabor",labelloc=t,fontname="DejaVu Sans",fontsize=23,bgcolor="white",pad=.35,ranksep=.9]; node[shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=13,fillcolor="#EFF6FA",color="#3E647C",penwidth=1.3,margin=".24,.2"]; edge[fontname="DejaVu Sans",fontsize=10,color="#526677",arrowsize=.7]; rankdir=LR;
+ visitante[label="Visitante\nConsulta catálogo público",fillcolor="#F5F6FC"];
+ cliente[label="Cliente\nCompra y revisa sus pedidos",fillcolor="#F5F6FC"];
+ operador[label="Operador / Admin\nGestiona catálogo y pagos de prueba",fillcolor="#F5F6FC"];
+ plataforma[label="Queso & Sabor\nSistema comercial: catálogo, clientes, pedidos, pagos",fillcolor="#FDECCE",color="#BD7F24",penwidth=2.2];
+ visitante->plataforma[label="consulta productos"];
+ cliente->plataforma[label="autenticación, carrito y pedidos"];
+ operador->plataforma[label="administración protegida"];
+ }

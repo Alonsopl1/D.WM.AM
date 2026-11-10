@@ -1,0 +1,14 @@
+digraph gateway {
+ graph [rankdir=LR,bgcolor="white",nodesep=.5,ranksep=.7];node[shape=record,fontname="DejaVu Sans",fontsize=11,style="rounded,filled",fillcolor="#F1F8F6",color="#54776E"];edge[fontname="DejaVu Sans",fontsize=10,color="#657A75"];
+ Gateway [label="{ApiGateway|routes: RouteDefinition[]\lrateLimit: 120/min/IP\l|route()\lauthenticate()\lauthorize()\l}"];
+ Route [label="{RouteDefinition|method: HTTP\lpath: str\ltarget: ServiceTarget\laccess: str\l}"];
+ Auth [label="{AuthenticationPolicy|jwtIssuer: str\laudience: str\l|validateToken()\l}"];
+ Policy [label="{AuthorizationPolicy|roles: str[]\lresourceOwner: bool\l|canAccess()\l}"];
+ Target [label="{ServiceTarget|service: str\linternalURL: str\l}"];
+ Secrets [label="{SecretProvider|symbolicReference: str\l|getKey()\l}"];
+ GQL [label="{GraphQLGateway|path: /graphql\lmaxDepth: 5\lmaxCost: 30\l|aggregate()\l}",fillcolor="#FFF2D8"];
+ Schema [label="{Schema|Query\lPedidoResumen\lProducto\l}"];
+ Resolver [label="{Resolver|resumenPedido()\lmisFavoritos()\l}"];
+ Internal [label="{BackendService|inventory\lorders\lclients\lpayments\l}"];
+ Gateway -> Route [label="1 / 1..*",dir=none];Route -> Target [label="* / 1",dir=none];Route -> Auth [style=dashed,arrowhead=open];Route -> Policy [style=dashed,arrowhead=open];Gateway -> Secrets [style=dashed,arrowhead=open];Gateway -> GQL [style=dashed,arrowhead=open];GQL -> Schema [label="1 / 1",dir=none];GQL -> Resolver [label="1 / 1..*",dir=none];Resolver -> Internal [style=dashed,arrowhead=open];Target -> Internal [style=dashed,arrowhead=open];
+}

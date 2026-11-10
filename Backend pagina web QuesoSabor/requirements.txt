@@ -1,0 +1,11 @@
+EVALUACIÓN 2 · RESULTADOS DE PRUEBAS
+Entorno de ejecución de referencia: Linux, Python 3.13.5, servicios FastAPI y bases SQLite locales.
+Comando: python -m pytest -q tests
+Resultado registrado: 17 pruebas aprobadas (3.49 s).
+Cobertura: catálogo, filtros, autenticación, permisos, pedidos, stock, pagos simulados, agregaciones GraphQL, idempotencia, controles internos y trazabilidad documental.
+Comando: python scripts/verificar_entrega.py
+Verificación de documentación: 24 servicios; 24 ejemplos de contratos; 72 decisiones de autorización; diagramas UML editables; schema GraphQL y configuración Compose.
+GraphQL: pruebas HTTP realizadas con el analizador de respaldo. El motor estándar graphql-core debe comprobarse con dependencias instaladas.
+Docker: configuración adjunta; ejecución de contenedores no comprobada en el entorno de referencia.
+Frontend: incorporado como fuente de requisitos y catálogo, sin conexión de pantallas HTML/JS con las API.
+Las pruebas son locales y no equivalen a una certificación de seguridad para producción.
