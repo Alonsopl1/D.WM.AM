@@ -1,0 +1,9 @@
+# Alcance técnico de la Evaluación 2
+
+El proyecto presenta el backend de Queso & Sabor a partir de las acciones, datos y pantallas del sitio responsivo. Se entregan los siete componentes HTTP (gateway, auth, inventory, clients, orders, payments, graphql), persistencia SQLite por dominio, contratos, documentación UML/C4 y pruebas.
+
+El frontend HTML/CSS/JS se adjunta para identificar pantallas, requisitos y datos del catálogo. En este paquete las pantallas todavía no consumen la API; los servicios se verifican con HTTP/Postman y pruebas automatizadas.
+
+Los pagos operan en un entorno de simulación, sin dinero real. No se implementan servicios externos de despacho, correo transaccional ni boleta electrónica; tampoco gRPC ni analítica especializada, cuya aplicabilidad se analiza en el ADR. El entorno local utiliza secretos generados y redes Docker configuradas; no sustituye un despliegue productivo con TLS/mTLS y gestor centralizado de credenciales.
+
+La evidencia existente demuestra pruebas locales con el modo de respaldo de GraphQL. Antes de una demostración en otro computador se debe instalar `graphql-core` y comprobar tanto el motor estándar como Docker, si se utilizará Compose.

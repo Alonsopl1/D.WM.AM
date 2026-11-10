@@ -1,0 +1,17 @@
+# ADR-009 — Aplicabilidad de analítica y gRPC
+Fecha: 2026-11-08. Estado: aceptado para la entrega 2 de Queso & Sabor.
+
+## Contexto
+El frontend muestra 15 productos, filtros/paginación, carrito local, favoritos y formularios. No presenta chat en tiempo real, telemetría de despacho, streaming, video, sensores, ni procesamiento masivo. Su carga no proviene de datos de producción; se modela mediante prueba HTTP sintética reproducible (scripts/load_test.py).
+
+## Alternativas
+A) gRPC interno para todas las llamadas. B) REST/JSON interno para operaciones acotadas. C) gRPC con streaming para notificaciones (no existe el flujo de negocio ni evento de streaming). Para analítica, comparar servicio ETL/big-data separado vs. consultas simples futuras bajo demanda.
+
+## Decisión
+Se escoge B, con REST privado y plazos de espera de 4s. No se implementan .proto ni servidor gRPC: sin cargas de alto volumen/streaming ni necesidad de contratos binarios, aumentaría complejidad sin demostrar un beneficio. No se crea motor separado de analítica porque ninguna pantalla pide métricas agregadas; una futura pantalla de reportes activaría reconsideración.
+
+## Evidencia y criterios de revisión
+La prueba reproducible usa HTTP GET catálogo contra gateway y registra número de peticiones, concurrencia, duración, p95, throughput y errores. El gateway protege 120 peticiones/minuto/IP, por lo que una ráfaga de >120 puede devolver 429: eso demuestra el límite, NO una mejora de velocidad. El script mide memoria y CPU cuando psutil está presente, como observación local. La prueba no corresponde a tráfico real. Si se añade rastreo en tiempo real, cientos de miles de eventos o streaming entre servicios, revisar el ADR y considerar gRPC/analítica separada.
+
+## Consecuencias
+Menor complejidad, mayor inspeccionabilidad por JSON; overhead HTTP tolerable para una demo. No hay evaluación del rendimiento distribuido, ni mediciones comparativas REST vs gRPC; no afirmar que una alternativa sea más rápida.

@@ -1,0 +1,8 @@
+﻿Sistema;Naturaleza;Responsabilidad;Datos bajo autoridad;Servicios;Dependencias;Identidad;Respuesta ante fallos
+inventory;Transaccional;Catálogo, precio vigente, stock, reservas;products,reservations;S01,S02,S18,S19,S20;orders, clients, graphql;INVENTORY_SERVICE_KEY + contexto admin para CRUD;"Reserva atómica; 409 falta de stock; 503 si dependencia cae"
+orders;Transaccional;Pedidos, líneas, estado, totales calculados;orders,lines;S12,S13,S14,S15;inventory, payments;ORDERS_SERVICE_KEY + JWT interno contextual;"Rechaza producto/stock inválido; compensación reserva fallida"
+clients;Transaccional;Cuentas, favoritos, contacto/comentarios;users,favorites,messages;S03,S05-S11,S21;inventory, auth, graphql;CLIENTS_SERVICE_KEY + contexto usuario;"403 ajeno; 409 email repetido"
+payments;Transaccional/simulador;Intento y estado de pago sandbox;payments;S16,S17,S22;orders;"PAYMENTS_SERVICE_KEY + PAYMENT_CONFIRMATION_KEY; admin para aprobar";"No se acepta pagado desde cliente; idempotencia por order_id"
+auth;Seguridad;"Verificación de credenciales; emisión token";sin datos propios;S03,S04;clients;"AUTH_SERVICE_KEY; JWT_SIGNING_KEY";"401 al fallar credencial; 503 indisponibilidad"
+graphql;Agregación privada;Combina pedidos/productos y favoritos/productos;sin datos propios;S23,S24;orders, clients, inventory;GRAPHQL_SERVICE_KEY + identidad verificada;Errores parciales y protección de consultas
+gateway;Borde de confianza;Allowlist, permisos, limitación y enrutamiento;sin datos propios;S01-S24;todos;JWT_SIGNING_KEY, GATEWAY_CONTEXT_KEY, claves destino;401/403/404/413/429/503

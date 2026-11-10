@@ -1,0 +1,17 @@
+digraph G {graph [label="C2 · Contenedores de Queso & Sabor",labelloc=t,fontname="DejaVu Sans",fontsize=23,bgcolor="white",pad=.35,ranksep=.7,nodesep=.35,compound=true]; node[shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=12,fillcolor="#EFF6FA",color="#3D697C",margin=".19,.15"]; edge[fontname="DejaVu Sans",fontsize=10,color="#526677",arrowsize=.65]; rankdir=LR;
+ frontend[label="Frontend anterior\nReferencia de eventos/datos\nNO conectado en Evaluación 2",fillcolor="#FFF1DA"];
+ cliente[label="Cliente / operador\nPostman o curl",fillcolor="#F5F6FC"];
+ gateway[label="API Gateway\nHTTP + roles + rutas",fillcolor="#D2E8EE"];
+ auth[label="Auth\nIdentidad y JWT"];
+ inv[label="Inventory\nCatálogo y stock"];
+ ord[label="Orders\nPedidos"];
+ cli[label="Clients\nPerfiles, favoritos"];
+ pay[label="Payments\nSandbox"];
+ gql[label="GraphQL Gateway privado\nAgregación"];
+ secret[label="Administrador de secretos\nDocker Compose secrets (archivos)\nNO Vault",fillcolor="#E4ECE3"];
+ subgraph cluster_private {label="Red privada: servicios y datos no expuestos";color="#CCDDE4";style="rounded,dashed";auth;inv;ord;cli;pay;gql;secret; dbinv[label="SQLite inventory",shape=cylinder,fillcolor="#FAF2E6"]; dbord[label="SQLite orders",shape=cylinder,fillcolor="#FAF2E6"]; dbcli[label="SQLite clients\n(+ identidad)",shape=cylinder,fillcolor="#FAF2E6"]; dbpay[label="SQLite payments",shape=cylinder,fillcolor="#FAF2E6"];}
+ cliente->gateway[label="GET, POST, PUT, DELETE; Bearer"]; frontend->gateway[style=dashed,label="solo flujo conceptual",color="#BD8F69"];
+ gateway->auth;gateway->inv;gateway->ord;gateway->cli;gateway->pay;gateway->gql;
+ ord->inv[label="stock/reservas"];pay->ord[label="confirmación protegida"];gql->ord;gql->inv;gql->cli;
+ inv->dbinv;ord->dbord;cli->dbcli;pay->dbpay;
+ secret->gateway[style=dotted,label="secret files"];secret->auth[style=dotted];secret->ord[style=dotted];secret->pay[style=dotted];}

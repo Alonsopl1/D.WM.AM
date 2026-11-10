@@ -1,0 +1,26 @@
+"""Contrato interno REST; NO se pasan credenciales en URLs."""
+import os
+import httpx
+from fastapi import HTTPException
+from common.base import env_secret
+
+PORTS={"auth":8101,"inventory":8102,"clients":8103,"orders":8104,"payments":8105,"graphql":8106}
+
+def service_url(name):
+    return os.getenv(name.upper()+"_URL", "http://127.0.0.1:"+str(PORTS[name]))
+
+def call(name, method, path, *, context=None, params=None, json=None, timeout=4.0, extra_headers=None):
+    headers={"X-Service-Key":env_secret(name.upper()+"_SERVICE_KEY")}
+    if context: headers["X-Verified-User"]=context
+    if extra_headers:
+        # Solo permitido en llamadas definidas entre servicios internos.
+        headers.update(extra_headers)
+    try:
+        return httpx.request(method, service_url(name)+path, headers=headers, params=params, json=json, timeout=timeout)
+    except httpx.RequestError:
+        raise HTTPException(503,"Servicio dependiente no disponible")
+
+def relay_failure(response):
+    try: detail=response.json().get("detail", "Solicitud rechazada")
+    except Exception: detail="Solicitud rechazada"
+    raise HTTPException(response.status_code, detail)

@@ -1,0 +1,4 @@
+digraph sequence {
+ graph[rankdir=TB,bgcolor="white",nodesep=.5];node[shape=box,style="rounded,filled",fillcolor="#EAF5F1",fontname="DejaVu Sans",fontsize=11,color="#54776E"];edge[fontname="DejaVu Sans",fontsize=10,color="#6C8580"];
+ a[label="1. Cliente autenticado\nPOST /api/v1/orders",fillcolor="#FFF1D2"];b[label="2. API Gateway\nValida JWT y rol"];c[label="3. orders\nLee detalle, NO confía en precio del cliente"];d[label="4. inventory\nGET precios disponibles"];e[label="5. inventory\nPOST reserva stock atómica"];f[label="6. orders\nPersiste pedido + líneas, pending_payment"];g[label="7. payments\nPOST /payments devuelve pending"];h[label="8. Administrador sandbox\nPOST /sandbox/payments/{id}/approve"];i[label="9. orders\nCambio a paid; respuesta idempotente"];a->b->c->d->e->f->g->h->i;
+}

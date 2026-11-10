@@ -1,0 +1,10 @@
+﻿Referencia;Tipo;Emisor;Consumidor;Finalidad;Ubicación;Alcance;Rotación/revocación
+REF-JWT;JWT HS256;Auth/gateway;auth/gateway;Emisión/verificación sesión;Archivo Docker secrets; .env solo local;aud quesosabor, 30 min;"Rotar al incidente; revoca tokens"
+REF-CONTEXT;JWT HS256;gateway;gateway y servicios;Identidad de 45s para servicios;Archivo Docker secrets; .env solo local;aud internal;"Rotar; claves coordinadas"
+REF-INVENTORY;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;INVENTORY_SERVICE_KEY;Rotar con despliegue coordinado
+REF-ORDERS;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;ORDERS_SERVICE_KEY;Rotar con despliegue coordinado
+REF-CLIENTS;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;CLIENTS_SERVICE_KEY;Rotar con despliegue coordinado
+REF-PAYMENTS;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;PAYMENTS_SERVICE_KEY;Rotar con despliegue coordinado
+REF-AUTH;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;AUTH_SERVICE_KEY;Rotar con despliegue coordinado
+REF-GRAPHQL;clave interna por servicio;scripts/make_env.py;servicio y llamadores autorizados;Autenticar HTTP interno;Archivo Docker secrets; .env solo local;GRAPHQL_SERVICE_KEY;Rotar con despliegue coordinado
+REF-PAYMENT-CONFIRMATION;credencial interna específica;scripts/make_env.py;payments y orders;Impedir que cualquier servicio confirme pago solo con ORDERS_SERVICE_KEY;Docker secrets PAYMENT_CONFIRMATION_KEY;solo estado paid en orders;Rotar ambos servicios coordinadamente

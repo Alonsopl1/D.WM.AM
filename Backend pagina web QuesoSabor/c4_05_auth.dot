@@ -1,0 +1,8 @@
+digraph G {graph [label="C3 · Componentes del API Gateway",labelloc=t,fontname="DejaVu Sans",fontsize=23,bgcolor="white",pad=.35,ranksep=.9];node[shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=13,color="#447285",fillcolor="#E8F3F8",margin=".24,.17"];edge[fontname="DejaVu Sans",fontsize=11,color="#526677"];rankdir=LR;
+ pet[label="Petición HTTP\nPostman / curl",fillcolor="#F5F5F9"];
+ adapter[label="Adaptador HTTP\nFastAPI + validación JSON"];
+ access[label="Filtro de acceso\nJWT, roles y rate limit"];
+ dispatch[label="Despachador de rutas\nROUTES allowlist + transporte"];
+ errors[label="Traductor de errores\n401/403/404/503 sin detalles",fillcolor="#FEF0DD"];
+ svc[label="Auth, Inventory, Orders,\nClients, Payments, GraphQL",fillcolor="#E4ECE3"];
+ pet->adapter->access->dispatch->svc;svc->errors[constraint=false];errors->pet[constraint=false];}

@@ -1,0 +1,25 @@
+﻿ID;Requisito;Pantalla;Acción;Verbo;Ruta externa;Sistema;Rol;Entrada;Salida;Reglas y errores;Clasificación
+S01;R01;P01/P02;Catálogo: listar y filtrar;GET;/api/v1/products;inventory;anónimo;tipo,leche,min_price,max_price,sort,page,limit;200 items,total,page,limit;"400 filtros inválidos; 422 tipos/rangos";público
+S02;R01;P02;Detalle producto;GET;/api/v1/products/{id};inventory;anónimo;id entero positivo;200 ficha pública;404 producto inexistente;público
+S03;R02;P03;Registrar cliente;POST;/api/v1/auth/register;auth/clients;anónimo;nombre,correo,password;201 id,nombre,correo,role;"409 correo duplicado; 422 validación";restringido
+S04;R02;P03;Autenticarse;POST;/api/v1/auth/login;auth;anónimo;usuario,password;200 access_token,role,expires_in;401 credenciales inválidas;credencial
+S05;R02;P03;Consultar perfil;GET;/api/v1/clients/me;clients;cliente/admin;Bearer JWT;200 id,name,email,role;"401 token; 404 usuario";restringido
+S06;R02;P03;Actualizar nombre;PUT;/api/v1/clients/me;clients;cliente/admin;nombre;200 updated;401/422;restringido
+S07;R03;P02/P04;Consultar favoritos;GET;/api/v1/favorites;clients;cliente/admin;Bearer JWT;200 product_ids;401;restringido
+S08;R03;P02/P04;Añadir favorito;POST;/api/v1/favorites;clients;cliente/admin;product_id;201 saved;404 producto;restringido
+S09;R03;P02/P04;Quitar favorito;DELETE;/api/v1/favorites/{id};clients;cliente/admin;id;200 removed;401;restringido
+S10;R04;P05;Enviar contacto;POST;/api/v1/contact;clients;anónimo;nombre,correo,asunto,mensaje;201 received,id;422;personal
+S11;R04;P06;Enviar comentario;POST;/api/v1/feedback;clients;anónimo;correo,comentario;201 received,id;422;personal
+S12;R05;P04;Crear pedido desde carrito;POST;/api/v1/orders;orders;cliente/admin;items(product_id,quantity),idempotency_key;201 id,total,status,items;"409 stock; 422 total no aceptado";restringido
+S13;R05;P04;Historial pedidos;GET;/api/v1/orders;orders;cliente/admin;Bearer JWT;200 items;"401; filtrado por propietario";restringido
+S14;R05;P04;Detalle pedido;GET;/api/v1/orders/{id};orders;cliente/admin;id pedido;200 detalle;"403 pedido ajeno; 404";restringido
+S15;R05;P04;Cancelar pedido pendiente;POST;/api/v1/orders/{id}/cancel;orders;cliente/admin;id pedido;200 cancelled;"409 estado no válido; 403 ajeno";restringido
+S16;R06;P04;Crear pago de prueba;POST;/api/v1/payments;payments;cliente/admin;order_id;201 pending,id,amount;"409 no pagable; 403 ajeno";restringido
+S17;R06;P04;Consultar pago;GET;/api/v1/payments/{id};payments;cliente/admin;id pago;200 status,amount;403 ajeno;restringido
+S18;R07;P07 proyectada;Alta de queso;POST;/api/v1/products;inventory;admin;ficha de producto + stock;201 id;"403 rol; 422 valores";público+interno
+S19;R07;P07 proyectada;Actualizar queso;PUT;/api/v1/products/{id};inventory;admin;ficha completa + stock;200 updated;"403 rol; 404";público+interno
+S20;R07;P07 proyectada;Desactivar queso;DELETE;/api/v1/products/{id};inventory;admin;id producto;200 active:false;"403 rol; 404";interno
+S21;R08;P07 proyectada;Consultar mensajes;GET;/api/v1/admin/messages;clients;admin;Bearer JWT;200 items (máx.100);403 rol;restringido
+S22;R06;P07 proyectada;Aprobar pago sandbox;POST;/api/v1/sandbox/payments/{id}/approve;payments;admin;id pago;200 approved;"403 rol; 409 cancelado";restringido
+S23;R09;P04 proyectada;Resumen GraphQL pedido;POST;/graphql;graphql/orders/inventory;cliente/admin;query resumenPedido(id);200 data + items/producto;"401; 403 pedido ajeno";restringido
+S24;R09;P04 proyectada;Favoritos GraphQL;POST;/graphql;graphql/clients/inventory;cliente/admin;query misFavoritos;200 data;"401; 403 campo";restringido

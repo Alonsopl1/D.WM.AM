@@ -1,0 +1,234 @@
+# Evaluacion 2: los secretos no se publican como variables de entorno en los contenedores.
+# Ejecutar primero python scripts/make_env.py; solo gateway expone el puerto 8000.
+services:
+  inventory:
+    build: .
+    restart: unless-stopped
+    networks: &id001
+    - backend_privado
+    command:
+    - uvicorn
+    - services.inventory.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8102'
+    environment:
+      SERVICE_PORT: '8102'
+      INVENTORY_SERVICE_KEY_FILE: /run/secrets/INVENTORY_SERVICE_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+    volumes:
+    - inventory_data:/app/data
+    secrets:
+    - INVENTORY_SERVICE_KEY
+    - GATEWAY_CONTEXT_KEY
+  clients:
+    build: .
+    restart: unless-stopped
+    networks: *id001
+    command:
+    - uvicorn
+    - services.clients.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8103'
+    environment:
+      SERVICE_PORT: '8103'
+      INVENTORY_URL: http://inventory:8102
+      CLIENTS_SERVICE_KEY_FILE: /run/secrets/CLIENTS_SERVICE_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+      INVENTORY_SERVICE_KEY_FILE: /run/secrets/INVENTORY_SERVICE_KEY
+    volumes:
+    - clients_data:/app/data
+    depends_on:
+    - inventory
+    secrets:
+    - CLIENTS_SERVICE_KEY
+    - GATEWAY_CONTEXT_KEY
+    - INVENTORY_SERVICE_KEY
+  orders:
+    build: .
+    restart: unless-stopped
+    networks: *id001
+    command:
+    - uvicorn
+    - services.orders.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8104'
+    environment:
+      SERVICE_PORT: '8104'
+      INVENTORY_URL: http://inventory:8102
+      ORDERS_SERVICE_KEY_FILE: /run/secrets/ORDERS_SERVICE_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+      INVENTORY_SERVICE_KEY_FILE: /run/secrets/INVENTORY_SERVICE_KEY
+      PAYMENT_CONFIRMATION_KEY_FILE: /run/secrets/PAYMENT_CONFIRMATION_KEY
+    volumes:
+    - orders_data:/app/data
+    depends_on:
+    - inventory
+    secrets:
+    - ORDERS_SERVICE_KEY
+    - GATEWAY_CONTEXT_KEY
+    - INVENTORY_SERVICE_KEY
+    - PAYMENT_CONFIRMATION_KEY
+  payments:
+    build: .
+    restart: unless-stopped
+    networks: *id001
+    command:
+    - uvicorn
+    - services.payments.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8105'
+    environment:
+      SERVICE_PORT: '8105'
+      ORDERS_URL: http://orders:8104
+      ENABLE_SANDBOX_PAYMENTS: ${ENABLE_SANDBOX_PAYMENTS:-0}
+      PAYMENTS_SERVICE_KEY_FILE: /run/secrets/PAYMENTS_SERVICE_KEY
+      ORDERS_SERVICE_KEY_FILE: /run/secrets/ORDERS_SERVICE_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+      PAYMENT_CONFIRMATION_KEY_FILE: /run/secrets/PAYMENT_CONFIRMATION_KEY
+    volumes:
+    - payments_data:/app/data
+    depends_on:
+    - orders
+    secrets:
+    - PAYMENTS_SERVICE_KEY
+    - ORDERS_SERVICE_KEY
+    - GATEWAY_CONTEXT_KEY
+    - PAYMENT_CONFIRMATION_KEY
+  auth:
+    build: .
+    restart: unless-stopped
+    networks: *id001
+    command:
+    - uvicorn
+    - services.auth.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8101'
+    environment:
+      SERVICE_PORT: '8101'
+      CLIENTS_URL: http://clients:8103
+      AUTH_SERVICE_KEY_FILE: /run/secrets/AUTH_SERVICE_KEY
+      CLIENTS_SERVICE_KEY_FILE: /run/secrets/CLIENTS_SERVICE_KEY
+      JWT_SIGNING_KEY_FILE: /run/secrets/JWT_SIGNING_KEY
+    depends_on:
+    - clients
+    secrets:
+    - AUTH_SERVICE_KEY
+    - CLIENTS_SERVICE_KEY
+    - JWT_SIGNING_KEY
+  graphql:
+    build: .
+    restart: unless-stopped
+    networks: *id001
+    command:
+    - uvicorn
+    - services.graphql.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8106'
+    environment:
+      SERVICE_PORT: '8106'
+      ORDERS_URL: http://orders:8104
+      INVENTORY_URL: http://inventory:8102
+      CLIENTS_URL: http://clients:8103
+      GRAPHQL_SERVICE_KEY_FILE: /run/secrets/GRAPHQL_SERVICE_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+      ORDERS_SERVICE_KEY_FILE: /run/secrets/ORDERS_SERVICE_KEY
+      INVENTORY_SERVICE_KEY_FILE: /run/secrets/INVENTORY_SERVICE_KEY
+      CLIENTS_SERVICE_KEY_FILE: /run/secrets/CLIENTS_SERVICE_KEY
+    depends_on:
+    - orders
+    - clients
+    - inventory
+    secrets:
+    - GRAPHQL_SERVICE_KEY
+    - GATEWAY_CONTEXT_KEY
+    - ORDERS_SERVICE_KEY
+    - INVENTORY_SERVICE_KEY
+    - CLIENTS_SERVICE_KEY
+  gateway:
+    build: .
+    restart: unless-stopped
+    networks:
+    - backend_privado
+    - publica
+    command:
+    - uvicorn
+    - services.gateway.app:app
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8000'
+    environment:
+      SERVICE_PORT: '8000'
+      AUTH_URL: http://auth:8101
+      INVENTORY_URL: http://inventory:8102
+      CLIENTS_URL: http://clients:8103
+      ORDERS_URL: http://orders:8104
+      PAYMENTS_URL: http://payments:8105
+      GRAPHQL_URL: http://graphql:8106
+      JWT_SIGNING_KEY_FILE: /run/secrets/JWT_SIGNING_KEY
+      GATEWAY_CONTEXT_KEY_FILE: /run/secrets/GATEWAY_CONTEXT_KEY
+      INVENTORY_SERVICE_KEY_FILE: /run/secrets/INVENTORY_SERVICE_KEY
+      ORDERS_SERVICE_KEY_FILE: /run/secrets/ORDERS_SERVICE_KEY
+      CLIENTS_SERVICE_KEY_FILE: /run/secrets/CLIENTS_SERVICE_KEY
+      PAYMENTS_SERVICE_KEY_FILE: /run/secrets/PAYMENTS_SERVICE_KEY
+      AUTH_SERVICE_KEY_FILE: /run/secrets/AUTH_SERVICE_KEY
+      GRAPHQL_SERVICE_KEY_FILE: /run/secrets/GRAPHQL_SERVICE_KEY
+    ports:
+    - 127.0.0.1:8000:8000
+    depends_on:
+    - auth
+    - inventory
+    - clients
+    - orders
+    - payments
+    - graphql
+    secrets:
+    - JWT_SIGNING_KEY
+    - GATEWAY_CONTEXT_KEY
+    - INVENTORY_SERVICE_KEY
+    - ORDERS_SERVICE_KEY
+    - CLIENTS_SERVICE_KEY
+    - PAYMENTS_SERVICE_KEY
+    - AUTH_SERVICE_KEY
+    - GRAPHQL_SERVICE_KEY
+networks:
+  backend_privado:
+    internal: true
+  publica:
+    driver: bridge
+volumes:
+  inventory_data: null
+  orders_data: null
+  clients_data: null
+  payments_data: null
+secrets:
+  INVENTORY_SERVICE_KEY:
+    file: ./secrets/INVENTORY_SERVICE_KEY
+  GATEWAY_CONTEXT_KEY:
+    file: ./secrets/GATEWAY_CONTEXT_KEY
+  CLIENTS_SERVICE_KEY:
+    file: ./secrets/CLIENTS_SERVICE_KEY
+  ORDERS_SERVICE_KEY:
+    file: ./secrets/ORDERS_SERVICE_KEY
+  PAYMENT_CONFIRMATION_KEY:
+    file: ./secrets/PAYMENT_CONFIRMATION_KEY
+  PAYMENTS_SERVICE_KEY:
+    file: ./secrets/PAYMENTS_SERVICE_KEY
+  AUTH_SERVICE_KEY:
+    file: ./secrets/AUTH_SERVICE_KEY
+  JWT_SIGNING_KEY:
+    file: ./secrets/JWT_SIGNING_KEY
+  GRAPHQL_SERVICE_KEY:
+    file: ./secrets/GRAPHQL_SERVICE_KEY

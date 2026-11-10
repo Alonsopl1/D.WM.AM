@@ -1,0 +1,86 @@
+workspace "Queso & Sabor - Evaluacion 2" "Modelo C4 adaptado de las vistas mostradas en clase; backend separado del frontend" {
+    model {
+        visitante = person "Visitante" "Consulta catálogo publico"
+        cliente = person "Cliente" "Inicia sesion y gestiona pedidos"
+        operador = person "Operador" "Administra catálogo y pruebas de pago"
+        plataforma = softwareSystem "Queso & Sabor" "Plataforma comercial de quesos" {
+            frontend = container "Frontend anterior" "Pantallas originales, datos y eventos; no conectado en esta entrega" "HTML / JS"
+            gateway = container "API Gateway" "Entrada publica, filtros y rutas" "FastAPI" {
+                adaptador = component "Adaptador HTTP" "Recepcion / respuesta" "FastAPI"
+                filtro = component "Filtro de acceso" "JWT, permisos y limites" "Python"
+                despacho = component "Despachador de rutas" "Lista permitida de rutas" "Python"
+                traductor = component "Traductor de errores" "Errores controlados" "Python"
+            }
+            auth = container "Auth Service" "Identidad y emision de JWT" "FastAPI"
+            inventory = container "Inventory" "Catálogo y stock" "FastAPI"
+            orders = container "Orders" "Pedidos, idempotencia y estados" "FastAPI"
+            clients = container "Clients" "Perfiles y favoritos" "FastAPI"
+            payments = container "Payments" "Pagos simulados" "FastAPI"
+            graphql = container "GraphQL Gateway" "Agregacion privada" "graphql-core" {
+                campos = component "Politica de campos" "Validacion y limites" "Python"
+                resolvers = component "Resolvers" "resumenPedido y misFavoritos" "Python"
+                conectores = component "Conectores" "REST internos" "httpx"
+                compositor = component "Compositor" "Respuesta GraphQL y errores" "Python"
+            }
+            dbInv = container "Base de inventario" "SQLite exclusivo inventory" "SQLite" "Database"
+            dbOrd = container "Base de pedidos" "SQLite exclusivo orders" "SQLite" "Database"
+            dbCli = container "Base clientes/identidad" "SQLite exclusivo clients/auth" "SQLite" "Database"
+            dbPay = container "Base de pagos" "SQLite exclusivo payments" "SQLite" "Database"
+            secrets = container "Proveedor de secretos" "Montaje Docker Compose secrets, no Vault" "Docker secrets"
+        }
+        visitante -> plataforma "Consulta productos"
+        cliente -> plataforma "Gestiona cuenta y pedidos"
+        operador -> plataforma "Administra recursos"
+        cliente -> gateway "HTTP con Bearer"
+        operador -> gateway "HTTP con Bearer"
+        visitante -> gateway "HTTP sin autenticacion para catálogo"
+        frontend -> gateway "Flujo esperado, NO conectado" 
+        gateway -> auth "Autentica"
+        gateway -> inventory "Catálogo"
+        gateway -> clients "Perfil, favoritos"
+        gateway -> orders "Pedidos"
+        gateway -> payments "Pagos"
+        gateway -> graphql "Consultas agregadas"
+        orders -> inventory "Reserva y libera stock"
+        payments -> orders "Confirma estado con credencial dedicada"
+        graphql -> orders "Datos de pedido"
+        graphql -> clients "Favoritos"
+        graphql -> inventory "Descripción y precios"
+        inventory -> dbInv "Lee/escribe"
+        orders -> dbOrd "Lee/escribe"
+        clients -> dbCli "Lee/escribe"
+        payments -> dbPay "Lee/escribe"
+        auth -> clients "Verifica credenciales"
+        secrets -> gateway "Proporciona secretos por archivos"
+        secrets -> auth "JWT de emision"
+        secrets -> payments "Credencial de confirmación"
+        secrets -> orders "Verifica capacidad de confirmar pago"
+        gateway -> adaptador "Recibe solicitud"
+        adaptador -> filtro "Filtra"
+        filtro -> despacho "Autoriza ruta"
+        despacho -> traductor "Responde con control de errores"
+        graphql -> campos "Aplica políticas"
+        campos -> resolvers "Permite campos"
+        resolvers -> conectores "Recupera datos"
+        conectores -> compositor "Compone respuestas"
+    }
+    views {
+        systemContext plataforma "C1-Contexto" {
+            include visitante cliente operador plataforma
+            autolayout lr
+        }
+        container plataforma "C2-Contenedores" {
+            include *
+            autolayout lr
+        }
+        component gateway "C3-API-Gateway" {
+            include *
+            autolayout lr
+        }
+        component graphql "C3-GraphQL" {
+            include *
+            autolayout lr
+        }
+        theme default
+    }
+}

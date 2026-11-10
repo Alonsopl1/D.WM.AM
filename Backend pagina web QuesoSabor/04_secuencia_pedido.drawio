@@ -1,0 +1,8 @@
+digraph deployment {
+ graph [rankdir=TB,bgcolor="white",ranksep=.6,compound=true];node [shape=box,style="rounded,filled",fillcolor="#EAF5F1",fontname="DejaVu Sans",fontsize=12,color="#54776E",margin=.15];edge[fontname="DejaVu Sans",color="#68877F",fontsize=10];
+ Client [label="Cliente HTTP / Postman\n(sin frontend integrado)",fillcolor="#FFF1D2"];
+ subgraph cluster_edge {label="Borde de red pública: host 127.0.0.1:8000";style=dashed;color="#D69E50";gateway [label="API Gateway\nAllowlist / JWT / rate-limit"]}
+ subgraph cluster_private {label="Red privada (Docker internal)";style="rounded,dashed";color="#84A39B";auth[label="Auth Service"];gql[label="GraphQL Gateway"];inventory[label="inventory\nSQLite propia"];orders[label="orders\nSQLite propia"];clients[label="clients\nSQLite propia"];payments[label="payments\nSQLite propia"];}
+ Secrets [label="Variables de entorno / secretos simbólicos\n(NO se publican valores)",fillcolor="#FFF1D2"];
+ Client -> gateway [label="HTTP" ];gateway -> auth;gateway -> inventory;gateway -> orders;gateway -> clients;gateway -> payments;gateway -> gql [label="POST /graphql"];auth -> clients; orders -> inventory [label="stock, precio"];payments -> orders [label="estado de pedido"];gql -> orders;gql -> clients;gql -> inventory;Secrets -> gateway [style=dashed];
+}

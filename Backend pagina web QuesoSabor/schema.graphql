@@ -1,0 +1,715 @@
+{
+  "_nota": "24 contratos S01-S24; datos y tokens ficticios. Respuestas de error 422 son esquemáticas; FastAPI devuelve una lista detail de validaciones. Ningún secreto real incluido.",
+  "contratos": [
+    {
+      "id": "S01",
+      "requisito": "R01",
+      "pantalla": "P01/P02",
+      "accion": "Catálogo: listar y filtrar",
+      "method": "GET",
+      "route": "/api/v1/products",
+      "access": "anónimo",
+      "content_type": "sin cuerpo",
+      "classification": "público",
+      "server_rules": "400 filtros inválidos; 422 tipos/rangos",
+      "request_query": {
+        "tipo": "Fresco",
+        "sort": "price-asc",
+        "page": 1,
+        "limit": 1
+      },
+      "response_200": {
+        "items": [
+          {
+            "id": 14,
+            "nombre": "Queso Fresco Campesino",
+            "tipo": "Fresco",
+            "leche": "Vaca",
+            "precio": 5490,
+            "imagen": "assets/img/queso-fresco.jpg",
+            "destacado": false,
+            "descripcion": "Ligero, húmedo y pensado para consumo diario.",
+            "disponible": true
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "limit": 1
+      },
+      "error_400": {
+        "detail": "Orden inválido"
+      }
+    },
+    {
+      "id": "S02",
+      "requisito": "R01",
+      "pantalla": "P02",
+      "accion": "Detalle producto",
+      "method": "GET",
+      "route": "/api/v1/products/{id}",
+      "access": "anónimo",
+      "content_type": "sin cuerpo",
+      "classification": "público",
+      "server_rules": "404 producto inexistente",
+      "request_path": {
+        "id": 1
+      },
+      "response_200": {
+        "id": 1,
+        "nombre": "Queso Gouda Artesanal",
+        "tipo": "Maduro",
+        "leche": "Vaca",
+        "precio": 8990,
+        "imagen": "img/gouda.jpg",
+        "destacado": true,
+        "descripcion": "Queso artesanal de ejemplo",
+        "disponible": true
+      },
+      "error_404": {
+        "detail": "Producto no encontrado"
+      }
+    },
+    {
+      "id": "S03",
+      "requisito": "R02",
+      "pantalla": "P03",
+      "accion": "Registrar cliente",
+      "method": "POST",
+      "route": "/api/v1/auth/register",
+      "access": "anónimo",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "409 correo duplicado; 422 validación",
+      "request_body": {
+        "nombre": "Ana Ejemplo",
+        "correo": "ana@example.test",
+        "password": "ClaveSegura!2026"
+      },
+      "response_201": {
+        "id": 41,
+        "nombre": "Ana Ejemplo",
+        "correo": "ana@example.test",
+        "role": "cliente"
+      },
+      "error_409": {
+        "detail": "Correo ya registrado"
+      }
+    },
+    {
+      "id": "S04",
+      "requisito": "R02",
+      "pantalla": "P03",
+      "accion": "Autenticarse",
+      "method": "POST",
+      "route": "/api/v1/auth/login",
+      "access": "anónimo",
+      "content_type": "application/json",
+      "classification": "credencial",
+      "server_rules": "401 credenciales inválidas",
+      "request_body": {
+        "usuario": "ana@example.test",
+        "password": "ClaveSegura!2026"
+      },
+      "response_200": {
+        "access_token": "<JWT_FICTICIO_NO_REAL>",
+        "token_type": "bearer",
+        "expires_in": 1800,
+        "role": "cliente"
+      },
+      "error_401": {
+        "detail": "Credenciales inválidas"
+      }
+    },
+    {
+      "id": "S05",
+      "requisito": "R02",
+      "pantalla": "P03",
+      "accion": "Consultar perfil",
+      "method": "GET",
+      "route": "/api/v1/clients/me",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "401 token; 404 usuario",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "response_200": {
+        "id": 41,
+        "name": "Ana Ejemplo",
+        "email": "ana@example.test",
+        "role": "cliente",
+        "created_at": "2026-11-09T14:00:00+00:00"
+      },
+      "error_401": {
+        "detail": "Se requiere Bearer token"
+      }
+    },
+    {
+      "id": "S06",
+      "requisito": "R02",
+      "pantalla": "P03",
+      "accion": "Actualizar nombre",
+      "method": "PUT",
+      "route": "/api/v1/clients/me",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "401/422",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "nombre": "Ana Actualizada"
+      },
+      "response_200": {
+        "updated": true
+      },
+      "error_422": {
+        "detail": "Validación de nombre"
+      }
+    },
+    {
+      "id": "S07",
+      "requisito": "R03",
+      "pantalla": "P02/P04",
+      "accion": "Consultar favoritos",
+      "method": "GET",
+      "route": "/api/v1/favorites",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "401",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "response_200": {
+        "product_ids": [
+          1,
+          3
+        ]
+      },
+      "error_401": {
+        "detail": "Se requiere Bearer token"
+      }
+    },
+    {
+      "id": "S08",
+      "requisito": "R03",
+      "pantalla": "P02/P04",
+      "accion": "Añadir favorito",
+      "method": "POST",
+      "route": "/api/v1/favorites",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "404 producto",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "product_id": 1
+      },
+      "response_201": {
+        "product_id": 1,
+        "saved": true
+      },
+      "error_404": {
+        "detail": "Producto inexistente"
+      }
+    },
+    {
+      "id": "S09",
+      "requisito": "R03",
+      "pantalla": "P02/P04",
+      "accion": "Quitar favorito",
+      "method": "DELETE",
+      "route": "/api/v1/favorites/{id}",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "401",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": 1
+      },
+      "response_200": {
+        "product_id": 1,
+        "removed": true
+      }
+    },
+    {
+      "id": "S10",
+      "requisito": "R04",
+      "pantalla": "P05",
+      "accion": "Enviar contacto",
+      "method": "POST",
+      "route": "/api/v1/contact",
+      "access": "anónimo",
+      "content_type": "application/json",
+      "classification": "personal",
+      "server_rules": "422",
+      "request_body": {
+        "nombre": "Ana Ejemplo",
+        "correo": "ana@example.test",
+        "asunto": "Consulta",
+        "mensaje": "Solicito información sobre el queso Gouda."
+      },
+      "response_201": {
+        "id": 10,
+        "received": true
+      },
+      "error_422": {
+        "detail": "Datos de contacto inválidos"
+      }
+    },
+    {
+      "id": "S11",
+      "requisito": "R04",
+      "pantalla": "P06",
+      "accion": "Enviar comentario",
+      "method": "POST",
+      "route": "/api/v1/feedback",
+      "access": "anónimo",
+      "content_type": "application/json",
+      "classification": "personal",
+      "server_rules": "422",
+      "request_body": {
+        "correo": "ana@example.test",
+        "comentario": "Me gustan los quesos artesanales."
+      },
+      "response_201": {
+        "id": 11,
+        "received": true
+      },
+      "error_422": {
+        "detail": "Comentario inválido"
+      }
+    },
+    {
+      "id": "S12",
+      "requisito": "R05",
+      "pantalla": "P04",
+      "accion": "Crear pedido desde carrito",
+      "method": "POST",
+      "route": "/api/v1/orders",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "409 stock; 422 total no aceptado",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 2
+          }
+        ],
+        "idempotency_key": "orden-demo-2026-001"
+      },
+      "response_201": {
+        "id": "c8af5d31cb3b4154b9f3000000000001",
+        "client_id": 41,
+        "total": 17980,
+        "status": "pending_payment",
+        "created_at": "2026-11-09T15:00:00+00:00",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 2,
+            "unit_price": 8990,
+            "nombre": "Queso Gouda Artesanal"
+          }
+        ]
+      },
+      "error_409": {
+        "detail": "Clave de idempotencia ya utilizada con otro contenido"
+      },
+      "notes": "Un reintento idéntico mantiene el mismo ID; una clave repetida con productos/cantidades distintos devuelve 409. El total es calculado en el servidor."
+    },
+    {
+      "id": "S13",
+      "requisito": "R05",
+      "pantalla": "P04",
+      "accion": "Historial pedidos",
+      "method": "GET",
+      "route": "/api/v1/orders",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "401; filtrado por propietario",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "response_200": {
+        "items": [
+          {
+            "id": "c8af5d31cb3b4154b9f3000000000001",
+            "client_id": 41,
+            "total": 17980,
+            "status": "pending_payment",
+            "created_at": "2026-11-09T15:00:00+00:00",
+            "items": [
+              {
+                "product_id": 1,
+                "quantity": 2,
+                "unit_price": 8990,
+                "nombre": "Queso Gouda Artesanal"
+              }
+            ]
+          }
+        ]
+      },
+      "notes": "Cliente: solo propios; admin: hasta 100 pedidos de cualquier cliente."
+    },
+    {
+      "id": "S14",
+      "requisito": "R05",
+      "pantalla": "P04",
+      "accion": "Detalle pedido",
+      "method": "GET",
+      "route": "/api/v1/orders/{id}",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "403 pedido ajeno; 404",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": "c8af5d31cb3b4154b9f3000000000001"
+      },
+      "response_200": {
+        "id": "c8af5d31cb3b4154b9f3000000000001",
+        "client_id": 41,
+        "total": 17980,
+        "status": "pending_payment",
+        "created_at": "2026-11-09T15:00:00+00:00",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 2,
+            "unit_price": 8990,
+            "nombre": "Queso Gouda Artesanal"
+          }
+        ]
+      },
+      "error_403": {
+        "detail": "El pedido pertenece a otro cliente"
+      }
+    },
+    {
+      "id": "S15",
+      "requisito": "R05",
+      "pantalla": "P04",
+      "accion": "Cancelar pedido pendiente",
+      "method": "POST",
+      "route": "/api/v1/orders/{id}/cancel",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "409 estado no válido; 403 ajeno",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": "c8af5d31cb3b4154b9f3000000000001"
+      },
+      "response_200": {
+        "id": "c8af5d31cb3b4154b9f3000000000001",
+        "status": "cancelled"
+      },
+      "error_409": {
+        "detail": "Solo se cancelan pedidos pendientes"
+      }
+    },
+    {
+      "id": "S16",
+      "requisito": "R06",
+      "pantalla": "P04",
+      "accion": "Crear pago de prueba",
+      "method": "POST",
+      "route": "/api/v1/payments",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "409 no pagable; 403 ajeno",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "order_id": "c8af5d31cb3b4154b9f3000000000001"
+      },
+      "response_201": {
+        "id": "f3b0a700ad0f4badb841000000000001",
+        "order_id": "c8af5d31cb3b4154b9f3000000000001",
+        "amount": 17980,
+        "status": "pending",
+        "provider": "simulador"
+      },
+      "error_409": {
+        "detail": "Pedido no pagable"
+      },
+      "notes": "Sandbox: no procesa pagos bancarios reales."
+    },
+    {
+      "id": "S17",
+      "requisito": "R06",
+      "pantalla": "P04",
+      "accion": "Consultar pago",
+      "method": "GET",
+      "route": "/api/v1/payments/{id}",
+      "access": "cliente/admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "403 ajeno",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": "f3b0a700ad0f4badb841000000000001"
+      },
+      "response_200": {
+        "id": "f3b0a700ad0f4badb841000000000001",
+        "order_id": "c8af5d31cb3b4154b9f3000000000001",
+        "amount": 17980,
+        "status": "pending"
+      },
+      "error_403": {
+        "detail": "Pago ajeno"
+      }
+    },
+    {
+      "id": "S18",
+      "requisito": "R07",
+      "pantalla": "P07 proyectada",
+      "accion": "Alta de queso",
+      "method": "POST",
+      "route": "/api/v1/products",
+      "access": "admin",
+      "content_type": "application/json",
+      "classification": "público+interno",
+      "server_rules": "403 rol; 422 valores",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "nombre": "Queso de Cabra Ahumado",
+        "tipo": "Maduro",
+        "leche": "Cabra",
+        "precio": 10990,
+        "imagen": "img/queso-cabra.jpg",
+        "destacado": false,
+        "descripcion": "Queso artesanal ahumado de prueba",
+        "stock": 20
+      },
+      "response_201": {
+        "id": 16
+      },
+      "error_403": {
+        "detail": "Permiso insuficiente"
+      }
+    },
+    {
+      "id": "S19",
+      "requisito": "R07",
+      "pantalla": "P07 proyectada",
+      "accion": "Actualizar queso",
+      "method": "PUT",
+      "route": "/api/v1/products/{id}",
+      "access": "admin",
+      "content_type": "application/json",
+      "classification": "público+interno",
+      "server_rules": "403 rol; 404",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": 16
+      },
+      "request_body": {
+        "nombre": "Queso de Cabra Ahumado",
+        "tipo": "Maduro",
+        "leche": "Cabra",
+        "precio": 10990,
+        "imagen": "img/queso-cabra.jpg",
+        "destacado": false,
+        "descripcion": "Queso artesanal ahumado de prueba",
+        "stock": 20
+      },
+      "response_200": {
+        "id": 16,
+        "updated": true
+      },
+      "error_404": {
+        "detail": "Producto no encontrado"
+      }
+    },
+    {
+      "id": "S20",
+      "requisito": "R07",
+      "pantalla": "P07 proyectada",
+      "accion": "Desactivar queso",
+      "method": "DELETE",
+      "route": "/api/v1/products/{id}",
+      "access": "admin",
+      "content_type": "sin cuerpo",
+      "classification": "interno",
+      "server_rules": "403 rol; 404",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": 16
+      },
+      "response_200": {
+        "id": 16,
+        "active": false,
+        "note": "Baja lógica: historial preservado"
+      },
+      "error_403": {
+        "detail": "Permiso insuficiente"
+      }
+    },
+    {
+      "id": "S21",
+      "requisito": "R08",
+      "pantalla": "P07 proyectada",
+      "accion": "Consultar mensajes",
+      "method": "GET",
+      "route": "/api/v1/admin/messages",
+      "access": "admin",
+      "content_type": "sin cuerpo",
+      "classification": "restringido",
+      "server_rules": "403 rol",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "response_200": {
+        "items": [
+          {
+            "id": 10,
+            "kind": "contact",
+            "name": "Ana Ejemplo",
+            "email": "ana@example.test",
+            "subject": "Consulta",
+            "body": "Solicito información sobre queso",
+            "created_at": "2026-11-09T15:00:00+00:00"
+          }
+        ]
+      },
+      "error_403": {
+        "detail": "Permiso insuficiente"
+      }
+    },
+    {
+      "id": "S22",
+      "requisito": "R06",
+      "pantalla": "P07 proyectada",
+      "accion": "Aprobar pago sandbox",
+      "method": "POST",
+      "route": "/api/v1/sandbox/payments/{id}/approve",
+      "access": "admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "403 rol; 409 cancelado",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_path": {
+        "id": "f3b0a700ad0f4badb841000000000001"
+      },
+      "response_200": {
+        "id": "f3b0a700ad0f4badb841000000000001",
+        "status": "approved",
+        "idempotent": false
+      },
+      "error_404": {
+        "detail": "Simulador deshabilitado"
+      },
+      "notes": "Solo administrador y entorno ENABLE_SANDBOX_PAYMENTS=1; confirmación interna requiere clave extra exclusiva."
+    },
+    {
+      "id": "S23",
+      "requisito": "R09",
+      "pantalla": "P04 proyectada",
+      "accion": "Resumen GraphQL pedido",
+      "method": "POST",
+      "route": "/graphql",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "401; 403 pedido ajeno",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "query": "query($id: ID!) { resumenPedido(id: $id) { id total status items { nombre quantity producto { nombre precio } } } }",
+        "variables": {
+          "id": "c8af5d31cb3b4154b9f3000000000001"
+        }
+      },
+      "response_200": {
+        "data": {
+          "resumenPedido": {
+            "id": "c8af5d31cb3b4154b9f3000000000001",
+            "total": 17980,
+            "status": "pending_payment",
+            "items": [
+              {
+                "nombre": "Queso Gouda Artesanal",
+                "quantity": 2,
+                "producto": {
+                  "nombre": "Queso Gouda Artesanal",
+                  "precio": 8990
+                }
+              }
+            ]
+          }
+        }
+      },
+      "error_403": {
+        "detail": "Introspección no habilitada"
+      },
+      "notes": "Combina orders + inventory. Consulta de pedido ajeno devuelve error GraphQL sin datos autorizados; GraphQL estándar puede responder HTTP 200 con errors."
+    },
+    {
+      "id": "S24",
+      "requisito": "R09",
+      "pantalla": "P04 proyectada",
+      "accion": "Favoritos GraphQL",
+      "method": "POST",
+      "route": "/graphql",
+      "access": "cliente/admin",
+      "content_type": "application/json",
+      "classification": "restringido",
+      "server_rules": "401; 403 campo",
+      "request_headers": {
+        "Authorization": "Bearer <TOKEN_FICTICIO>"
+      },
+      "request_body": {
+        "query": "{ misFavoritos { id nombre precio tipo } }"
+      },
+      "response_200": {
+        "data": {
+          "misFavoritos": [
+            {
+              "id": 1,
+              "nombre": "Queso Gouda Artesanal",
+              "precio": 8990,
+              "tipo": "Maduro"
+            }
+          ]
+        }
+      },
+      "error_400": {
+        "detail": "Campos o argumentos GraphQL inválidos"
+      },
+      "notes": "Combina clients + inventory; no incluye correo, nombre del usuario ni contraseñas."
+    }
+  ]
+}
